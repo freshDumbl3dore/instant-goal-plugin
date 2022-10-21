@@ -35,30 +35,24 @@ void InstantGoalPlugin::onLoad()
 
 
 
-
+	
 	cvarManager->registerNotifier("instant_goal", [&cm = this->cvarManager, &gw = this->gameWrapper](std::vector<std::string>) {
 
 		if (enabled) {
 			if (!gw->IsInFreeplay())
 				return;
 			ServerWrapper tw = gw->GetGameEventAsServer();
-
-			//If there are less than 2 goals, its probably a workshop map, dont rebound here
-			if (tw.GetGoals().Count() < 2 || tw.GetCars().Count() == 0)
-				return;
-
 			CarWrapper player = tw.GetCars().Get(0);
 			BallWrapper ball = tw.GetGameBalls().Get(0);
 			if (player.IsNull() || tw.GetBall().IsNull())
 				return;
 
 			Vector ballLoc = tw.GetBall().GetLocation();
-
 			Vector goalTarget = tw.GenerateGoalAimLocation(0, ballLoc);
-			goalTarget.Z = tw.GetGoalExtent(0).Z;
 			float Speed = 2000.0;
 			Vector shot = tw.GenerateShot(ballLoc, goalTarget, Speed);
 
+			//teleport the ball to the goalline and score 
 			ball.SetLocation(tw.GetGoals().Get(0).GetLocation());
 			tw.GetBall().SetVelocity(shot);
 		}
@@ -74,7 +68,6 @@ void InstantGoalPlugin::onUnload()
 	if (!enableCvar) {
 		return;
 	}
-
 	std::string bind = enableCvar.getStringValue();
 	cvarManager->removeBind(bind);
 }
