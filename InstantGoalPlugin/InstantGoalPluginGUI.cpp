@@ -16,13 +16,13 @@ void InstantGoalPlugin::SetImGuiContext(uintptr_t ctx) {
 // This will show up in bakkesmod when the plugin is loaded at
 //  f2 -> plugins -> KakkesPlugin
 void InstantGoalPlugin::RenderSettings() {
-	ImGui::TextUnformatted("Plugin settings");
 
-
+	//list of selectable keybinds
 	const char* items[] = { "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Zero", "F7", "F8", "F9", "F11", "F12",
 		"NumPadOne", "NumPadTwo", "NumPadThree", "NumPadFour", "NumPadFive", "NumPadSix", "NumPadSeven", "NumPadEight", "NumPadNine", "NumPadZero",
 		"XboxTypeS_LeftThumbStick", "XboxTypeS_RightThumbStick", "XboxTypeS_DPad_Up", "XboxTypeS_DPad_Left", "XboxTypeS_DPad_Right",  "XboxTypeS_DPad_Down",
 		"XboxTypeS_LeftX", "XboxTypeS_LeftY", "XboxTypeS_RightX", "XboxTypeS_RightY", "XboxTypeS_X", "XboxTypeS_Y", "XboxTypeS_A", "XboxTypeS_A", };
+	//set default keybnd to key "Zero"
 	static int item_current = 9;
 
 
@@ -30,23 +30,24 @@ void InstantGoalPlugin::RenderSettings() {
 	if (!enableCvar) {
 		return;
 	}
-	bool enabled = enableCvar.getBoolValue();
+	bool isEnabled = enableCvar.getBoolValue();
 
-	if (ImGui::Checkbox("Enable plugin", &enabled)) {
-		enableCvar.setValue(enabled);
+
+
+	ImGui::TextUnformatted("Plugin settings");
+
+	//Checkbox to enable/disable the plugin
+	if (ImGui::Checkbox("Enable plugin", &isEnabled)) {
+		enableCvar.setValue(isEnabled);
 	}
 	if (ImGui::IsItemHovered()) {
 		ImGui::SetTooltip("Toggle Plugin");
 	}
 
 
-
-
+	//remove old bind and set a new bind
 	cvarManager->removeBind(items[item_current]);
 	ImGui::Combo("Select Key-Binding", &item_current, items, IM_ARRAYSIZE(items));
-
-	ImGui::SameLine();
-	ImGui::NewLine();
 
 	cvarManager->setBind(items[item_current], "instant_goal");
 	enableCvar = cvarManager->getCvar("plugin_bind");
@@ -54,7 +55,6 @@ void InstantGoalPlugin::RenderSettings() {
 		return;
 	}
 	enableCvar.setValue(items[item_current]);
-
 
 }
 
@@ -92,13 +92,6 @@ std::string InstantGoalPlugin::GetMenuTitle()
 	return menuTitle_;
 }
 
-/*
-// Don't call this yourself, BM will call this function with a pointer to the current ImGui context
-void Instant_Goal_Plugin::SetImGuiContext(uintptr_t ctx)
-{
-	ImGui::SetCurrentContext(reinterpret_cast<ImGuiContext*>(ctx));
-}
-*/
 
 // Should events such as mouse clicks/key inputs be blocked so they won't reach the game
 bool InstantGoalPlugin::ShouldBlockInput()
@@ -116,16 +109,11 @@ bool InstantGoalPlugin::IsActiveOverlay()
 void InstantGoalPlugin::OnOpen()
 {
 	isWindowOpen_ = true;
-
 }
 
 // Called when window is closed
 void InstantGoalPlugin::OnClose()
 {
-
 	isWindowOpen_ = false;
-
-
-
 }
 
