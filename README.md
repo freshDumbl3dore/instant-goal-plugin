@@ -1,4 +1,4 @@
-# instant-goal-plugin
+# BakkesMod Instant Goal Plugin
 
 ## Installation
 
