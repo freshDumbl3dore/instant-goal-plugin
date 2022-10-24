@@ -2,7 +2,7 @@
 
 This plugin allows you to instantly shoot the ball into the goal in freeplay by the press of one button.  
 Have you ever hit a really nice shot in freeplay or a successfully execute a new mechanic but you barely missed the goal and you dont get a replay of your shot because of that?  
-Now you can use this plugin to instatly score the ball if you are in this situatuion. This allows you to rewatch your shot.
+Now you can use this plugin to instatly score the ball if you are in this situatuion. The plugin allows you to rewatch your shot.
 
 
 ## Installation
