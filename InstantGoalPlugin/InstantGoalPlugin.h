@@ -33,13 +33,11 @@ class InstantGoalPlugin : public BakkesMod::Plugin::BakkesModPlugin, public Bakk
 	bool isWindowOpen_ = false;
 	bool isMinimized_ = false;
 	std::string menuTitle_ = "Instant Goal Plugin";
-	static int clicked;
 
 
 	virtual void Render() override;
 	virtual std::string GetMenuName() override;
 	virtual std::string GetMenuTitle() override;
-	//virtual void SetImGuiContext(uintptr_t ctx) override;
 	virtual bool ShouldBlockInput() override;
 	virtual bool IsActiveOverlay() override;
 	virtual void OnOpen() override;
