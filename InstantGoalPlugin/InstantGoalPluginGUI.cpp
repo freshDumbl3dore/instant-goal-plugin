@@ -23,7 +23,8 @@ void InstantGoalPlugin::RenderSettings() {
 		"XboxTypeS_LeftThumbStick", "XboxTypeS_RightThumbStick", "XboxTypeS_DPad_Up", "XboxTypeS_DPad_Left", "XboxTypeS_DPad_Right",  "XboxTypeS_DPad_Down",
 		"XboxTypeS_LeftX", "XboxTypeS_LeftY", "XboxTypeS_RightX", "XboxTypeS_RightY", "XboxTypeS_X", "XboxTypeS_Y", "XboxTypeS_A", "XboxTypeS_A", };
 	//set default keybnd to key "Zero"
-	static int item_current = 9;
+	static int goal_bind = 9;
+	static int camera_bind = 8;
 
 
 	CVarWrapper enableCvar = cvarManager->getCvar("plugin_enabled");
@@ -41,21 +42,33 @@ void InstantGoalPlugin::RenderSettings() {
 		enableCvar.setValue(isEnabled);
 	}
 	if (ImGui::IsItemHovered()) {
-		ImGui::SetTooltip("Toggle Plugin");
+		ImGui::SetTooltip("Enable/Disable Plugin");
 	}
 
 
+	//key-bind for instant goal
 	//remove old bind and set a new bind
-	cvarManager->removeBind(items[item_current]);
-	ImGui::Combo("Select Key-Binding", &item_current, items, IM_ARRAYSIZE(items));
+	cvarManager->removeBind(items[goal_bind]);
+	ImGui::Combo("Select key binding for Instant Goal", &goal_bind, items, IM_ARRAYSIZE(items));
+	cvarManager->setBind(items[goal_bind], "instant_goal");
 
-	cvarManager->setBind(items[item_current], "instant_goal");
-	enableCvar = cvarManager->getCvar("plugin_bind");
-	if (!enableCvar) {
+	//key-bind for camera toggle
+	//remove old bind and set a new bind
+	cvarManager->removeBind(items[camera_bind]);
+	ImGui::Combo("Select key binding for Camera Toggle", &camera_bind, items, IM_ARRAYSIZE(items));
+	cvarManager->setBind(items[camera_bind], "toggle_camera");
+
+	ImGui::TextUnformatted("(Check out the Bindings-Tab to not overwrite any active bindings)");
+
+
+
+	CVarWrapper cvar_plugin_bind = cvarManager->getCvar("plugin_bind");
+	CVarWrapper cvar_camera_bind = cvarManager->getCvar("camera_bind");
+	if (!cvar_plugin_bind || !cvar_camera_bind) {
 		return;
 	}
-	enableCvar.setValue(items[item_current]);
-
+	cvar_plugin_bind.setValue(items[goal_bind]);
+	cvar_camera_bind.setValue(items[camera_bind]);
 }
 
 
