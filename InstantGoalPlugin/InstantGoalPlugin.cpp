@@ -46,7 +46,7 @@ void InstantGoalPlugin::onLoad()
 	cvarManager->registerNotifier("instant_goal", [&cm = this->cvarManager, &gw = this->gameWrapper](std::vector<std::string>) {
 
 		if (enabled) {
-			if (!gw->IsInFreeplay())
+			if (!gw->IsInFreeplay() && !gw->IsInCustomTraining())
 				return;
 			ServerWrapper tw = gw->GetGameEventAsServer();
 			CarWrapper player = tw.GetCars().Get(0);
@@ -57,6 +57,8 @@ void InstantGoalPlugin::onLoad()
 
 			Vector ballLoc = tw.GetBall().GetLocation();
 			Vector goalTarget = tw.GetGoalLocation(1);
+			LOG("TEST");
+			LOG("X = {}, Y = {}, Z = {}", goalTarget.X, goalTarget.Y, goalTarget.Z);
 			float Speed = 1999.0;
 			Vector shot = tw.GenerateShot(ballLoc, goalTarget, Speed);
 
