@@ -48,23 +48,24 @@ void InstantGoalPlugin::onLoad()
 		if (enabled) {
 			if (!gw->IsInFreeplay() && !gw->IsInCustomTraining())
 				return;
-			ServerWrapper tw = gw->GetGameEventAsServer();
-			CarWrapper player = tw.GetCars().Get(0);
-			BallWrapper ball = tw.GetGameBalls().Get(0);
-			if (player.IsNull() || tw.GetBall().IsNull()) {
-				return;
-			}
+			ServerWrapper server = gw->GetGameEventAsServer();
+			if (!server) { return; }
+			CarWrapper player = server.GetCars().Get(0);
+			if (!player) { return; }
+			BallWrapper ball = server.GetGameBalls().Get(0);
+			if (!ball) { return; }
+		
 
-			Vector ballLoc = tw.GetBall().GetLocation();
-			Vector goalTarget = tw.GetGoalLocation(1);
+			Vector ballLoc = server.GetBall().GetLocation();
+			Vector goalTarget = server.GetGoalLocation(1);
 			LOG("TEST");
 			LOG("X = {}, Y = {}, Z = {}", goalTarget.X, goalTarget.Y, goalTarget.Z);
 			float Speed = 1999.0;
-			Vector shot = tw.GenerateShot(ballLoc, goalTarget, Speed);
+			Vector shot = server.GenerateShot(ballLoc, goalTarget, Speed);
 
 			//teleport the ball to the goalline and score 
-			ball.SetLocation(tw.GetGoals().Get(1).GetLocation());
-			tw.GetBall().SetVelocity(shot);
+			ball.SetLocation(server.GetGoals().Get(1).GetLocation());
+			server.GetBall().SetVelocity(shot);
 		}
 
 	}, "Puts the ball in the goal", PERMISSION_ALL);
